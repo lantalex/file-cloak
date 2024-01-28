@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.Cleaner;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -33,16 +30,26 @@ public class FileCloak implements AutoCloseable {
 
             Path pathToFile = pathToOriginalFile.resolveSibling(pathToOriginalFile.getFileName() + EXTENSION);
 
-            Files.deleteIfExists(pathToFile);
-
-            final FileChannel cloakedFileChannel = FileChannel.open(pathToFile, getOpenOptions());
-
-            Files.deleteIfExists(pathToFile);
+            final FileChannel cloakedFileChannel = createFileChannel(pathToFile);
 
             copyFile(originalFileChannel, cloakedFileChannel);
 
             return new FileCloak(cloakedFileChannel);
         }
+    }
+
+    private static FileChannel createFileChannel(Path pathToFile) throws IOException {
+        Files.deleteIfExists(pathToFile);
+
+        final FileChannel cloakedFileChannel = FileChannel.open(pathToFile, getOpenOptions());
+
+        if (isWindows()) {
+            Files.setAttribute(pathToFile, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
+        } else {
+            Files.deleteIfExists(pathToFile);
+        }
+
+        return cloakedFileChannel;
     }
 
     private static void copyFile(FileChannel originalFileChannel, FileChannel cloakedFileChannel) throws IOException {
@@ -63,13 +70,17 @@ public class FileCloak implements AutoCloseable {
                 StandardOpenOption.DELETE_ON_CLOSE
         );
 
-        List<OpenOption> extraOptions = System.getProperty("os.name").toLowerCase().contains("win")
+        List<OpenOption> extraOptions = isWindows()
                 ? List.of(ExtendedOpenOption.NOSHARE_READ, ExtendedOpenOption.NOSHARE_WRITE, ExtendedOpenOption.NOSHARE_DELETE)
                 : List.of();
 
         return Stream
                 .concat(defaultOptions.stream(), extraOptions.stream())
                 .toArray(OpenOption[]::new);
+    }
+
+    private static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
     }
 
     public InputStream getInputStream() throws IOException {
