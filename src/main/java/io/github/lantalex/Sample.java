@@ -32,6 +32,7 @@ public class Sample {
 
         fileCloak.close();
 
+        now = System.nanoTime();
         try (InputStream is = new FileInputStream(FILE_NAME)) {
             System.out.println("MD5 original: " + calculateMd5(is));
         }
