@@ -2,18 +2,18 @@
 
 Creating cloaked file: 3311 ms
 
-MD5 cloaked: B122110225C31CC72D1ABCCB0A886A8F
+MD5 cloaked: B122110225C31CC72D1ABCCB0A886A8F\
 time: 6890ms
 
-MD5 original: B122110225C31CC72D1ABCCB0A886A8F
+MD5 original: B122110225C31CC72D1ABCCB0A886A8F\
 time: 7110ms
 
 # Windows
 
-Creating cloaked file: 2568 ms
+Creating cloaked file: 5264 ms
 
 MD5 cloaked: B122110225C31CC72D1ABCCB0A886A8F\
-time: 5174ms
+time: 5177ms
 
 MD5 original: B122110225C31CC72D1ABCCB0A886A8F\
-time: 10965ms 
+time: 5931ms 

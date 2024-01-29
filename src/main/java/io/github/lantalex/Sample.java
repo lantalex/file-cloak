@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Sample {
 
-    public static final String FILE_NAME = "/home/lantalex/starfive-jh7110-202311-SD-minimal-desktop.img";
+    public static final String FILE_NAME = "C:\\Users\\lantalex\\Desktop\\starfive-jh7110-202311-SD-minimal-desktop.img";
 
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 
